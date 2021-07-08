@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_4">4dp</dimen>
+    <dimen name="padding_8">8dp</dimen>
+    <dimen name="padding_16">16dp</dimen>
+    <dimen name="padding_32">32dp</dimen>
+    <dimen name="padding_64">64dp</dimen>
+
+    <dimen name="padding_12">12dp</dimen>
+    <dimen name="padding_24">24dp</dimen>
+
+    <dimen name="textsize_title_big">24sp</dimen>
+    <dimen name="textsize_title">20sp</dimen>
+    <dimen name="textsize_body">14sp</dimen>
+    <dimen name="textsize_modal">20sp</dimen>
+    <dimen name="textsize_item">16sp</dimen>
+    <dimen name="textsize_itemsub">14sp</dimen>
+
+    <dimen name="progressbar_diameter_size">100dp</dimen>
+    <dimen name="grid_spacing">1dp</dimen>
+    <dimen name="tab_height">50dp</dimen>
+
+    <dimen name="bottomspace">75dp</dimen>
+
+</resources>

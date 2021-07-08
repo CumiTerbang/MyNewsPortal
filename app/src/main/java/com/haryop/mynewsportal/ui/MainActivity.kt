@@ -1,7 +1,8 @@
-package com.haryop.mynewsportal
+package com.haryop.mynewsportal.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.haryop.mynewsportal.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
