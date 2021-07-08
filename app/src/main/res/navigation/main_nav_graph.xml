@@ -20,7 +20,16 @@
         android:name="com.haryop.mynewsportal.ui.sourcepage.SourcePageFragment"
         android:label="Select Source"
         tools:layout="@layout/fragment_source_page">
+        <action
+            android:id="@+id/action_source_to_newslist"
+            app:destination="@id/newslistPageFragment" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/newslistPageFragment"
+        android:name="com.haryop.mynewsportal.ui.newslistpage.NewsListPageFragment"
+        android:label="News List"
+        tools:layout="@layout/fragment_newslist_page">
     </fragment>
 
 

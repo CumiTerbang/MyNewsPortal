@@ -4,20 +4,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.haryop.mynewsportal.R
 import com.haryop.mynewsportal.databinding.FragmentSourcePageBinding
 import com.haryop.mynewsportal.utils.Resource
 import com.haryop.synpulsefrontendchallenge.ui.companylist.SourceAdapter
 import com.haryop.synpulsefrontendchallenge.utils.BaseFragmentBinding
-import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
+
 @AndroidEntryPoint
 class SourcePageFragment : BaseFragmentBinding<FragmentSourcePageBinding>(),
-    SourceAdapter.SourceItemListener {
+    SourceAdapter.SourceItemListener, SwipeRefreshLayout.OnRefreshListener {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentSourcePageBinding
         get() = FragmentSourcePageBinding::inflate
@@ -27,11 +32,12 @@ class SourcePageFragment : BaseFragmentBinding<FragmentSourcePageBinding>(),
     override fun setupView(binding: FragmentSourcePageBinding) {
         viewBinding = binding
 
-        arguments?.getString("category")?.let {
-            viewModel.start(it)
-        }
         setUpRecyclerView()
-        onGetSourcesObserver()
+        arguments?.getString("category")?.let {
+            category = it
+            viewModel.start(it)
+            onGetSourcesObserver()
+        }
     }
 
     private lateinit var adapter: SourceAdapter
@@ -39,14 +45,16 @@ class SourcePageFragment : BaseFragmentBinding<FragmentSourcePageBinding>(),
         adapter = SourceAdapter(this@SourcePageFragment)
         sourceRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         sourceRecyclerView.adapter = adapter
+
+        sourceSwipeContainer.setOnRefreshListener(this@SourcePageFragment)
     }
 
     private val viewModel: SourceViewModel by viewModels()
-    private fun onGetSourcesObserver()=with(viewBinding) {
-        viewModel.getSearchEndpoint.observe(viewLifecycleOwner, Observer {
+    private fun onGetSourcesObserver() = with(viewBinding) {
+        viewModel.getSource.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
-                    progressBar.visibility = View.GONE
+                    sourceSwipeContainer.isRefreshing = false
                     if (!it.data.isNullOrEmpty()) {
                         var items = ArrayList<Any>()
                         items.addAll(ArrayList(it.data))
@@ -58,20 +66,39 @@ class SourcePageFragment : BaseFragmentBinding<FragmentSourcePageBinding>(),
                     }
                 }
                 Resource.Status.ERROR -> {
-                    progressBar.visibility = View.GONE
+                    sourceSwipeContainer.isRefreshing = false
                     Timber.e("getSearchEndpoint.observe: error")
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
                 Resource.Status.LOADING -> {
                     Timber.e("getSearchEndpoint.observe: LOADING")
-                    progressBar.visibility = View.VISIBLE
+                    sourceSwipeContainer.isRefreshing = true
                 }
             }
         })
     }
 
-    override fun onClickedSource(source: String) {
-        TODO("Not yet implemented")
+    override fun onClickedSource(source_id: String, source_name: String) {
+        findNavController().navigate(
+            R.id.action_source_to_newslist,
+            bundleOf(
+                "source_id" to source_id,
+                "source_name" to source_name,
+                "category" to category
+            )
+        )
+    }
+
+    override fun onExpandItem(position: Int) {
+        adapter.notifyItemChanged(position)
+    }
+
+    override fun onRefresh() {
+        adapter.getItems().clear()
+        adapter.notifyDataSetChanged()
+        viewModel.start(category)
+        onGetSourcesObserver()
+        adapter.notifyDataSetChanged()
     }
 
 }

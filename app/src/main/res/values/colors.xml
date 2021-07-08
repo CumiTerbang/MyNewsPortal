@@ -14,6 +14,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="list_line_color">#656565</color>
+    <color name="list_expand_color">#ECECEC</color>
+
     <color name="peach">#FF6D62</color>
     <color name="peach_dark">#C5564E</color>
     <color name="yellow">#FFEB3B</color>

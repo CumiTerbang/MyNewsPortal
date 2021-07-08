@@ -22,4 +22,6 @@
 
     <dimen name="bottomspace">75dp</dimen>
 
+    <dimen name="divider">0.1dp</dimen>
+
 </resources>

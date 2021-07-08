@@ -2,27 +2,63 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical"
     android:padding="@dimen/padding_16">
 
     <TextView
-        android:text="Bloomberg"
         android:id="@+id/name"
+        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Bloomberg"
         android:textSize="@dimen/textsize_item" />
 
     <TextView
-        android:text="http://www.bloomberg.com"
         android:id="@+id/url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="http://www.bloomberg.com"
         android:textSize="@dimen/textsize_itemsub" />
 
-    <View
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/expandPart"
         android:layout_marginTop="@dimen/padding_8"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black"/>
+        android:layout_height="wrap_content"
+        android:background="@color/list_expand_color"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="5"
+            android:padding="@dimen/padding_8"
+            android:text="@string/lorem_ipsum"
+            android:textSize="@dimen/textsize_itemsub" />
+
+        <TextView
+            android:id="@+id/readMore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/show_news"
+            android:textStyle="bold"
+            android:gravity="right"
+            android:textColor="@color/peach"
+            android:paddingRight="@dimen/padding_16"
+            android:paddingTop="@dimen/padding_16"
+            android:paddingBottom="@dimen/padding_16"
+            android:textSize="@dimen/textsize_item" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider"
+        android:layout_marginTop="@dimen/padding_8"
+        android:background="@color/list_line_color" />
 
 </LinearLayout>

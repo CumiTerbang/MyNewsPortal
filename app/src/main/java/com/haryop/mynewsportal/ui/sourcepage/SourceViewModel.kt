@@ -25,6 +25,6 @@ class SourceViewModel @Inject constructor(
         repository.getSources(category)
     }
 
-    val getSearchEndpoint: LiveData<Resource<List<SourceEntity>>> = _getSources
+    val getSource: LiveData<Resource<List<SourceEntity>>> = _getSources
 
 }

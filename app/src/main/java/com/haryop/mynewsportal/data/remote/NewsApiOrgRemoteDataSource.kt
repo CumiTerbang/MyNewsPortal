@@ -6,6 +6,8 @@ class NewsApiOrgRemoteDataSource @Inject constructor(
     private val newsApiOrgServices: NewsApiOrgServices
 ) : BaseDataSource() {
 
-    suspend fun getSearchEndpoint(category: String) = getResult { newsApiOrgServices.getSources(category) }
+    suspend fun getSources(category: String) = getResult { newsApiOrgServices.getSources(category) }
+
+    suspend fun getHeadlines(source: String) = getResult { newsApiOrgServices.getHeadlines(source) }
 
 }
