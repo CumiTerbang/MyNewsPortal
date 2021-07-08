@@ -3,6 +3,7 @@
 <img src="https://github.com/CumiTerbang/MyNewsPortal/blob/master/readme_assets/screenshot_1.jpg" width="200" height="355,56"> <img src="https://github.com/CumiTerbang/MyNewsPortal/blob/master/readme_assets/screenshot_2.jpg" width="200" height="355,56">
 
 an android app demo to browse and read international news articles using API from  [newsapi.org](https://newsapi.org/)
+
 this is my approach for Bank Mandiri Technical Test provided by Nityo Infotech by making an android application based on the requirement as the solution
 
 Click [here](https://drive.google.com/file/d/1hfTtxqt7IB4BPQDB1EKHBLWP8oVY6gad/view?usp=sharing) to download the app

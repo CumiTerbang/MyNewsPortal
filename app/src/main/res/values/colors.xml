@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">@color/peach</color>
-    <color name="colorPrimaryVariant">@color/purple_500</color>
+    <color name="colorPrimaryVariant">@color/peach_dark</color>
     <color name="colorOnPrimary">@color/teal_200</color>
 
     <color name="colorOnPrimaryNight">#272727</color>
@@ -15,4 +15,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="peach">#FF6D62</color>
+    <color name="peach_dark">#C5564E</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="yellow_dark">#FFC107</color>
 </resources>

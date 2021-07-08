@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/categoryPageFragment">
+
+    <fragment
+        android:id="@+id/categoryPageFragment"
+        android:name="com.haryop.mynewsportal.ui.categorypage.CategoryPageFragment"
+        android:label="Select Category"
+        tools:layout="@layout/fragment_category_page">
+        <action
+            android:id="@+id/action_category_to_source"
+            app:destination="@id/sourcePageFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/sourcePageFragment"
+        android:name="com.haryop.mynewsportal.ui.sourcepage.SourcePageFragment"
+        android:label="Select Source"
+        tools:layout="@layout/fragment_source_page">
+
+    </fragment>
+
+
+</navigation>

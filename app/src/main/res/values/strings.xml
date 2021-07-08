@@ -2,14 +2,24 @@
     <string name="app_name">MyNewsPortal</string>
 
     <string-array name="news_categories_array">
-        <item>business</item>
-        <item>entertainment</item>
-        <item>general</item>
-        <item>health</item>
-        <item>science</item>
-        <item>sports</item>
-        <item>technology</item>
+        <item>Business</item>
+        <item>Entertainment</item>
+        <item>General</item>
+        <item>Health</item>
+        <item>Science</item>
+        <item>Sports</item>
+        <item>Technology</item>
     </string-array>
+
+    <integer-array name="news_categories_images_array">
+        <item>@drawable/ctgry_business</item>
+        <item>@drawable/ctgry_entertainment</item>
+        <item>@drawable/ctgry_general</item>
+        <item>@drawable/ctgry_health</item>
+        <item>@drawable/ctgry_science</item>
+        <item>@drawable/ctgry_sports</item>
+        <item>@drawable/ctgry_technology</item>
+    </integer-array>
 
 </resources>
 

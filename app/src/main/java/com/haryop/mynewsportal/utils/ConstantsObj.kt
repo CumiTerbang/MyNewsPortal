@@ -1,8 +1,7 @@
 package com.haryop.mynewsportal.utils
 
 object ConstantsObj {
-    object ConstantsObj {
-        const val NEWSAPIORG_APIKEY = "demo"
-        const val NEWSAPIORG_BASEURL = "https://newsapi.org/v2/"
-    }
+    const val NEWSAPIORG_APIKEY = "demo"
+    const val NEWSAPIORG_BASEURL = "https://newsapi.org/v2/"
+    const val NEWSAPIORG_BASEPARAM = "apiKey=${NEWSAPIORG_APIKEY}"
 }
