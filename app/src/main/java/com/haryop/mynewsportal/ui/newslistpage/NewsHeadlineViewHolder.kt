@@ -5,9 +5,7 @@ import com.bumptech.glide.Glide
 import com.haryop.mynewsportal.R
 import com.haryop.mynewsportal.data.entities.NewsListEntity
 import com.haryop.mynewsportal.databinding.ItemNewsHeadlineLayoutBinding
-import com.haryop.mynewsportal.databinding.ItemNewsLayoutBinding
-import java.lang.Exception
-import java.text.SimpleDateFormat
+import com.haryop.synpulsefrontendchallenge.utils.setDate
 import java.util.*
 
 class NewsHeadlineViewHolder(
@@ -18,7 +16,7 @@ class NewsHeadlineViewHolder(
 
     fun bind(item: NewsListEntity) = with(itemBinding) {
         title.text = item.title
-        date.text = setDate(item.publishedAt)
+        date.text = itemView.context.setDate(item.publishedAt)
         itemView.setOnClickListener { listener.onClickedItem(item) }
 
         Glide.with(itemBinding.root)
@@ -28,29 +26,6 @@ class NewsHeadlineViewHolder(
 
     }
 
-    fun setDate(publishedAt: String): String {
-        var date: String = publishedAt
-        try {
-            //publishedAt = 2021-07-08T10:30:11+00:00
-            if (publishedAt.contains("Z")) {
-                publishedAt.replace("Z","")
-            }
-
-            var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-            val newDate: Date = format.parse(publishedAt)
-            format = SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm")
-            date = format.format(newDate)
-
-        } catch (e: Exception) {
-            if (date.contains("Z")) {
-                date.replace("Z","")
-            }
-
-            date.replace("T", " ")
-        }
-
-        return date
-    }
 
 
 }

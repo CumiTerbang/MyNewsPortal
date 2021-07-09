@@ -3,7 +3,6 @@ package com.haryop.mynewsportal.ui
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.core.app.NavUtils
 import com.haryop.mynewsportal.R
 import com.haryop.mynewsportal.databinding.ActivityAboutBinding
 import com.haryop.synpulsefrontendchallenge.utils.BaseActivityBinding

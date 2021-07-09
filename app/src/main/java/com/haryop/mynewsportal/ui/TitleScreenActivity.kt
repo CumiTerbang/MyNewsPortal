@@ -1,20 +1,13 @@
 package com.haryop.mynewsportal.ui
 
 import android.content.Intent
-import android.graphics.drawable.TransitionDrawable
 import android.view.LayoutInflater
 import android.widget.ImageView
 import com.haryop.mynewsportal.R
-import com.haryop.mynewsportal.data.entities.CategoryEntity
 import com.haryop.mynewsportal.databinding.ActivityTitleScreenBinding
 import com.haryop.synpulsefrontendchallenge.utils.BaseActivityBinding
-import com.haryop.synpulsefrontendchallenge.utils.comingSoon
 import com.synnapps.carouselview.ImageClickListener
 import com.synnapps.carouselview.ImageListener
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class TitleScreenActivity : BaseActivityBinding<ActivityTitleScreenBinding>() {
 

@@ -1,6 +1,7 @@
 package com.haryop.mynewsportal.data.entities
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class NewsListEntity(
     @SerializedName("source") val source: NewsListEntitySource,
@@ -11,10 +12,10 @@ data class NewsListEntity(
     @SerializedName("urlToImage") val urlToImage: String,
     @SerializedName("publishedAt") val publishedAt: String,
     @SerializedName("content") val content: String,
-)
+):Serializable
 
 data class NewsListEntitySource(
-    @SerializedName("id") val author: String,
-    @SerializedName("name") val title: String
-)
+    @SerializedName("id") val id: String,
+    @SerializedName("name") val name: String
+):Serializable
 

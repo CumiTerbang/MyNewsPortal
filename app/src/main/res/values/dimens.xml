@@ -11,6 +11,7 @@
 
     <dimen name="textsize_title_big">24sp</dimen>
     <dimen name="textsize_title">20sp</dimen>
+    <dimen name="textsize_titlesub">12sp</dimen>
     <dimen name="textsize_body">14sp</dimen>
     <dimen name="textsize_modal">20sp</dimen>
     <dimen name="textsize_item">16sp</dimen>

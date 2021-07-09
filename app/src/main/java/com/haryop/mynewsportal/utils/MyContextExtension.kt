@@ -9,6 +9,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 fun Fragment.hideKeyboard() {
@@ -24,7 +27,7 @@ fun Context.hideKeyboard(view: View) {
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
-fun Context.comingSoon(activity: Activity, msg: String=""){
+fun Context.comingSoon(activity: Activity, msg: String = "") {
     val toast = Toast.makeText(activity, "COMING SOON${msg}", Toast.LENGTH_SHORT)
     val v = toast.view!!.findViewById<View>(R.id.message) as TextView
     if (v != null) v.gravity = Gravity.CENTER
@@ -39,4 +42,29 @@ fun Fragment.comingSoon(msg: String) {
 fun Activity.comingSoon(msg: String) {
     comingSoon(this, msg)
 }
+
+fun Context.setDate(publishedAt: String): String {
+    var date: String = publishedAt
+    try {
+        //publishedAt = 2021-07-08T10:30:11+00:00
+        if (publishedAt.contains("Z")) {
+            publishedAt.replace("Z", "")
+        }
+
+        var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+        val newDate: Date = format.parse(publishedAt)
+        format = SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm")
+        date = format.format(newDate)
+
+    } catch (e: Exception) {
+        if (date.contains("Z")) {
+            date.replace("Z", "")
+        }
+
+        date.replace("T", " ")
+    }
+
+    return date
+}
+
 

@@ -1,5 +1,6 @@
 package com.haryop.mynewsportal.ui.searchpage
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.haryop.mynewsportal.data.entities.NewsListEntity
 import com.haryop.mynewsportal.databinding.FragmentNewslistPageBinding
 import com.haryop.mynewsportal.ui.ToolbarTitleListener
+import com.haryop.mynewsportal.ui.newsdetail.NewsDeatailActivity
 import com.haryop.mynewsportal.utils.Resource
 import com.haryop.synpulsefrontendchallenge.ui.companylist.NewsListAdapter
 import com.haryop.synpulsefrontendchallenge.utils.BaseFragmentBinding
@@ -86,7 +88,9 @@ class SearchFragment : BaseFragmentBinding<FragmentNewslistPageBinding>(),
     }
 
     override fun onClickedItem(item: NewsListEntity) {
-        comingSoon("\nNews Detail Page")
+        var intent = Intent(activity, NewsDeatailActivity::class.java)
+        intent.putExtra("item", item);
+        startActivity(intent)
     }
 
     override fun onRefresh() {
