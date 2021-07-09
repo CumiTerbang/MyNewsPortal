@@ -15,26 +15,26 @@ class TitleScreenActivity : BaseActivityBinding<ActivityTitleScreenBinding>() {
         get() = ActivityTitleScreenBinding::inflate
 
     override fun setupView(binding: ActivityTitleScreenBinding) {
-        setUpBackground()
+//        setUpBackground()
         setUpAction()
     }
 
-    fun setUpBackground() = with(binding) {
-
-        var category_images = resources.obtainTypedArray(R.array.news_categories_images_array)
-
-        titleScreenCarouselView.pageCount = category_images.indexCount
-        titleScreenCarouselView.setImageClickListener(object : ImageListener, ImageClickListener {
-            override fun setImageForPosition(position: Int, imageView: ImageView?) {
-                imageView?.setImageResource(category_images.getResourceId(position, 0))
-            }
-
-            override fun onClick(position: Int) {
-                //do nothing
-            }
-        })
-
-    }
+//    fun setUpBackground() = with(binding) {
+//
+//        var category_images = resources.obtainTypedArray(R.array.news_categories_images_array)
+//
+//        titleScreenCarouselView.pageCount = category_images.indexCount
+//        titleScreenCarouselView.setImageClickListener(object : ImageListener, ImageClickListener {
+//            override fun setImageForPosition(position: Int, imageView: ImageView?) {
+//                imageView?.setImageResource(category_images.getResourceId(position, 0))
+//            }
+//
+//            override fun onClick(position: Int) {
+//                //do nothing
+//            }
+//        })
+//
+//    }
 
     fun setUpAction() = with(binding) {
         getStart.setOnClickListener { openCategory() }

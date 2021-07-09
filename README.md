@@ -1,6 +1,6 @@
 # MyNewsPortal Android App
 
-<img src="https://github.com/CumiTerbang/MyNewsPortal/blob/master/readme_assets/screenshot_1.jpg" width="200" height="355,56"> <img src="https://github.com/CumiTerbang/MyNewsPortal/blob/master/readme_assets/screenshot_2.jpg" width="200" height="355,56">
+<img src="https://github.com/CumiTerbang/MyNewsPortal/blob/master/readme_assets/screenshot_1.jpg" width="200" height="355,56"> <img src="https://github.com/CumiTerbang/MyNewsPortal/blob/master/readme_assets/screenshot_2.jpg" width="200" height="355,56"> <img src="https://github.com/CumiTerbang/MyNewsPortal/blob/master/readme_assets/screenshot_3.jpg" width="200" height="355,56">
 
 an android app demo to browse and read international news articles using API from  [newsapi.org](https://newsapi.org/)
 

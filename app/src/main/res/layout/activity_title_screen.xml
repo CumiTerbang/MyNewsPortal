@@ -11,11 +11,11 @@
         android:scaleType="centerCrop"
         android:src="@drawable/ctgry_general" />
 
-    <com.synnapps.carouselview.CarouselView
-        android:id="@+id/title_screen_carousel_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:slideInterval="3000"/>
+<!--    <com.synnapps.carouselview.CarouselView-->
+<!--        android:id="@+id/title_screen_carousel_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:slideInterval="3000"/>-->
 
     <View
         android:layout_width="match_parent"

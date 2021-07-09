@@ -9,13 +9,16 @@ import retrofit2.http.Query
 
 interface NewsApiOrgServices {
 
-    @GET("sources?"+ConstantsObj.NEWSAPIORG_BASEPARAM)
+    @GET("sources?" + ConstantsObj.NEWSAPIORG_BASEPARAM)
     suspend fun getSources(@Query("category") category: String?): Response<SourceEntities>
 
-    @GET("top-headlines?"+ConstantsObj.NEWSAPIORG_BASEPARAM)
+    @GET("top-headlines?" + ConstantsObj.NEWSAPIORG_BASEPARAM)
     suspend fun getHeadlines(@Query("sources") sources: String?): Response<NewsListEntities>
 
-    @GET("everything?pageSize=10&"+ConstantsObj.NEWSAPIORG_BASEPARAM)
-    suspend fun getEverything(@Query("q") query: String?, @Query("page") page: String?): Response<NewsListEntities>
+    @GET("everything?pageSize=" + ConstantsObj.EVERYTHING_PAGE_SIZE + "&" + ConstantsObj.NEWSAPIORG_BASEPARAM)
+    suspend fun getEverything(
+        @Query("q") query: String?,
+        @Query("page") page: String?
+    ): Response<NewsListEntities>
 
 }

@@ -2,12 +2,12 @@ package com.haryop.mynewsportal.ui.newslistpage
 
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.haryop.mynewsportal.data.entities.NewsListEntity
 import com.haryop.mynewsportal.databinding.FragmentNewslistPageBinding
@@ -52,14 +52,41 @@ class NewsListPageFragment : BaseFragmentBinding<FragmentNewslistPageBinding>(),
         (activity as ToolbarTitleListener).onUpdateTitle(source_name, category_name, true)
     }
 
+    private var loading = true
+    var pastVisiblesItems = 0
+    var visibleItemCount: Int = 0
+    var totalItemCount: Int = 0
+    var page_param = 1
     private lateinit var adapter: NewsListAdapter
     fun setUpRecyclerView() = with(viewbinding) {
         adapter = NewsListAdapter(this@NewsListPageFragment)
         adapter.setCurrent_page(adapter.NEWSLIST_PAGE)
-        newslistRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        var layManager = LinearLayoutManager(requireContext())
+        newslistRecyclerView.layoutManager = layManager
         newslistRecyclerView.adapter = adapter
 
         newslistSwipeContainer.setOnRefreshListener(this@NewsListPageFragment)
+
+        newslistRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) { //check for scroll down
+                    visibleItemCount = layManager.getChildCount();
+                    totalItemCount = layManager.getItemCount();
+                    pastVisiblesItems = layManager.findFirstVisibleItemPosition();
+
+                    if (loading) {
+                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                            loading = false;
+                            // Do pagination.. i.e. fetch new data
+                            page_param++
+                            comingSoon("\nDO NEXT PAGE")
+
+                            loading = true;
+                        }
+                    }
+                }
+            }
+        })
     }
 
     private val viewModel: NewsListViewModel by viewModels()

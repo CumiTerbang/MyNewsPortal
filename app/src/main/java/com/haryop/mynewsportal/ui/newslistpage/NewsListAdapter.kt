@@ -30,6 +30,11 @@ class NewsListAdapter(private val listener: NewsListItemListener) :
         notifyDataSetChanged()
     }
 
+    fun addItems(items: ArrayList<Any>) {
+        this.items.addAll(items)
+        notifyDataSetChanged()
+    }
+
     val SEARCH_PAGE = 0
     val NEWSLIST_PAGE = 1
     private var current_page = 0
@@ -37,6 +42,7 @@ class NewsListAdapter(private val listener: NewsListItemListener) :
         this.current_page = current_page
     }
 
+    val BOTTOMSPACE_LAYOUT = "BOTTOMSPACE_LAYOUT"
     val ITEM_TYPE_NEWS_ITEM_LAYOUT = 0
     val ITEM_TYPE_BOTTOMSPACE_LAYOUT = 1
     val ITEM_TYPE_NEWS_HEADLINE_LAYOUT = 2

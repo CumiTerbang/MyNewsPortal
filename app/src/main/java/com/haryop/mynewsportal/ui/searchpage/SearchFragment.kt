@@ -2,27 +2,29 @@ package com.haryop.mynewsportal.ui.searchpage
 
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.haryop.mynewsportal.data.entities.NewsListEntity
 import com.haryop.mynewsportal.databinding.FragmentNewslistPageBinding
-import com.haryop.mynewsportal.ui.ToolbarTitleListener
 import com.haryop.mynewsportal.ui.newsdetail.NewsDeatailActivity
+import com.haryop.mynewsportal.utils.ConstantsObj
+import com.haryop.mynewsportal.utils.EndlessRecyclerViewScrollListener
 import com.haryop.mynewsportal.utils.Resource
 import com.haryop.synpulsefrontendchallenge.ui.companylist.NewsListAdapter
 import com.haryop.synpulsefrontendchallenge.utils.BaseFragmentBinding
-import com.haryop.synpulsefrontendchallenge.utils.comingSoon
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import kotlin.math.roundToInt
+
 
 @AndroidEntryPoint
 class SearchFragment : BaseFragmentBinding<FragmentNewslistPageBinding>(),
-    NewsListAdapter.NewsListItemListener, SwipeRefreshLayout.OnRefreshListener{
+    NewsListAdapter.NewsListItemListener, SwipeRefreshLayout.OnRefreshListener {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentNewslistPageBinding
         get() = FragmentNewslistPageBinding::inflate
@@ -38,40 +40,74 @@ class SearchFragment : BaseFragmentBinding<FragmentNewslistPageBinding>(),
     fun setupToolbar() {
         arguments?.getString("query")?.let {
             query = it
-            val hashMap:HashMap<String,String> = HashMap<String,String>()
+            val hashMap: HashMap<String, String> = HashMap<String, String>()
             hashMap.put("query", it)
             hashMap.put("page", "1")
             viewModel.start(hashMap)
-            onGetSourcesObserver()
+            onGetSourcesObserver(1)
         }
     }
 
+    private var loading = true
+    var pastVisiblesItems = 0
+    var visibleItemCount: Int = 0
+    var totalItemCount: Int = 0
+    var total_articles: Int = 0
+    var page_param = 1
+    var totalpage = 0
     private lateinit var adapter: NewsListAdapter
+    private lateinit var scrollListener: EndlessRecyclerViewScrollListener
     fun setUpRecyclerView() = with(viewbinding) {
         adapter = NewsListAdapter(this@SearchFragment)
         adapter.setCurrent_page(adapter.SEARCH_PAGE)
 
-        newslistRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        var linearLayoutManager = LinearLayoutManager(requireContext())
+        newslistRecyclerView.layoutManager = linearLayoutManager
         newslistRecyclerView.adapter = adapter
 
         newslistSwipeContainer.setOnRefreshListener(this@SearchFragment)
+
+        scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+//                comingSoon("\nDO LOAD MORE" +
+//                        "\npage=${page}")
+
+                var page_toload = page + 1
+                if (page_toload <= totalpage) {
+                    getData(query, page_toload)
+                }
+
+            }
+        }
+
+        newslistRecyclerView.addOnScrollListener(scrollListener)
+
     }
 
     private val viewModel: SearchViewModel by viewModels()
-    private fun onGetSourcesObserver() = with(viewbinding) {
+    private var items = ArrayList<Any>()
+    private fun onGetSourcesObserver(_page: Int) = with(viewbinding) {
         viewModel.getEverything.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
                     newslistSwipeContainer.isRefreshing = false
-                    if (!it.data.isNullOrEmpty()) {
-                        var items = ArrayList<Any>()
-                        items.addAll(ArrayList(it.data))
-                        items.add(adapter.ITEM_TYPE_BOTTOMSPACE_LAYOUT)
-                        adapter.setItems(items)
-                        adapter.notifyDataSetChanged()
-                    } else {
-                        Timber.e("getSearchEndpoint.observe: SUCCESS tapi null")
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    if (it.data != null) {
+                        total_articles = it.data.totalResults
+                        totalpage= (total_articles / ConstantsObj.EVERYTHING_PAGE_SIZE).toFloat().roundToInt()
+                        if (!it.data.articles.isNullOrEmpty()) {
+                            var oldcount = items.size
+                            items.addAll(ArrayList(it.data.articles))
+                            if(_page == totalpage){
+                                items.add(adapter.BOTTOMSPACE_LAYOUT)
+                            }
+                            adapter.setItems(items)
+
+                        } else {
+                            Timber.e("getSearchEndpoint.observe: SUCCESS tapi null")
+                            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
                 Resource.Status.ERROR -> {
@@ -97,17 +133,26 @@ class SearchFragment : BaseFragmentBinding<FragmentNewslistPageBinding>(),
         onReSearch(query)
     }
 
-    fun onReSearch(_query:String) {
+    fun onReSearch(_query: String) {
         query = _query
         adapter.getItems().clear()
         adapter.notifyDataSetChanged()
 
-        val hashMap:HashMap<String,String> = HashMap<String,String>()
+        items.clear()
+
+        getData(_query, 1)
+    }
+
+    fun getData(_query: String, _page: Int) {
+        adapter.getItems().clear()
+        adapter.notifyDataSetChanged()
+
+        val hashMap: HashMap<String, String> = HashMap<String, String>()
         hashMap.put("query", _query)
-        hashMap.put("page", "1")
+        hashMap.put("page", _page.toString())
 
         viewModel.start(hashMap)
-        onGetSourcesObserver()
+        onGetSourcesObserver(_page)
     }
 
 }

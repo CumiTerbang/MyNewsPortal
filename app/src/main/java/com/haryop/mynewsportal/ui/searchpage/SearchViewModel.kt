@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
+import com.haryop.mynewsportal.data.entities.NewsListEntities
 import com.haryop.mynewsportal.data.entities.NewsListEntity
 import com.haryop.mynewsportal.data.repository.NewsApiOrgRepository
 import com.haryop.mynewsportal.utils.Resource
@@ -25,6 +26,10 @@ class SearchViewModel @Inject constructor(
         repository.getEverything(map)
     }
 
-    val getEverything: LiveData<Resource<List<NewsListEntity>>> = _getEverything
+    fun getTotal_articles():Int{
+        return repository.getEverything_total_articles()
+    }
+
+    val getEverything: LiveData<Resource<NewsListEntities>> = _getEverything
 
 }
