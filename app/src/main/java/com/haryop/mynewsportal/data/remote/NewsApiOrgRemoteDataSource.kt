@@ -10,4 +10,6 @@ class NewsApiOrgRemoteDataSource @Inject constructor(
 
     suspend fun getHeadlines(source: String) = getResult { newsApiOrgServices.getHeadlines(source) }
 
+    suspend fun getEverything(query: String, page: String) = getResult { newsApiOrgServices.getEverything(query, page) }
+
 }

@@ -15,4 +15,7 @@ interface NewsApiOrgServices {
     @GET("top-headlines?"+ConstantsObj.NEWSAPIORG_BASEPARAM)
     suspend fun getHeadlines(@Query("sources") sources: String?): Response<NewsListEntities>
 
+    @GET("everything?pageSize=10&"+ConstantsObj.NEWSAPIORG_BASEPARAM)
+    suspend fun getEverything(@Query("q") query: String?, @Query("page") page: String?): Response<NewsListEntities>
+
 }

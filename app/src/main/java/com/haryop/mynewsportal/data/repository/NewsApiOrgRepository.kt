@@ -39,6 +39,12 @@ class NewsApiOrgRepository @Inject constructor(
         networkCall = { remoteDataSource.getHeadlines(source) }
     )
 
+    fun getEverything(map:HashMap<String, String>) = performGetHeadlinesOperation(
+        networkCall = { remoteDataSource.getEverything(map.get("query").toString(), map.get("page").toString()) }
+    )
+
+
+
     fun <A> performGetHeadlinesOperation(
         networkCall: suspend () -> Resource<A>
     ): LiveData<Resource<List<NewsListEntity>>> =

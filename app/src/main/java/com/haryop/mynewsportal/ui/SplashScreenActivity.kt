@@ -24,7 +24,7 @@ class SplashScreenActivity: BaseActivityBinding<ActivitySplashScreenBinding>() {
     fun setupAction(view: View) = with(binding) {
         activityScope.launch {
             delay(2000)
-            var intent = Intent(this@SplashScreenActivity, MainActivity::class.java)
+            var intent = Intent(this@SplashScreenActivity, TitleScreenActivity::class.java)
             startActivity(intent)
             finish()
         }

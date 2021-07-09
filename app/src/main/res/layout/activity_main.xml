@@ -19,12 +19,24 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_host_category_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true" />
+        android:layout_height="match_parent">
 
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_host_category_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true" />
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/blackscreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.7"
+            android:background="@color/black" />
+
+    </RelativeLayout>
 </LinearLayout>

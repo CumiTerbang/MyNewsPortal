@@ -1,4 +1,4 @@
-package com.haryop.mynewsportal.ui.newslistpage
+package com.haryop.mynewsportal.ui.searchpage
 
 import android.view.LayoutInflater
 import android.view.View
@@ -19,16 +19,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class NewsListPageFragment : BaseFragmentBinding<FragmentNewslistPageBinding>(),
-    NewsListAdapter.NewsListItemListener, SwipeRefreshLayout.OnRefreshListener {
+class SearchFragment : BaseFragmentBinding<FragmentNewslistPageBinding>(),
+    NewsListAdapter.NewsListItemListener, SwipeRefreshLayout.OnRefreshListener{
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentNewslistPageBinding
         get() = FragmentNewslistPageBinding::inflate
 
     lateinit var viewbinding: FragmentNewslistPageBinding
-    var category_name = ""
-    var source_name = ""
-    var source_id = ""
+    var query = ""
     override fun setupView(binding: FragmentNewslistPageBinding) {
         viewbinding = binding
         setUpRecyclerView()
@@ -36,33 +34,30 @@ class NewsListPageFragment : BaseFragmentBinding<FragmentNewslistPageBinding>(),
     }
 
     fun setupToolbar() {
-        arguments?.getString("category")?.let {
-            category_name = it
-        }
-        arguments?.getString("source_name")?.let {
-            source_name = it
-        }
-        arguments?.getString("source_id")?.let {
-            source_id = it
-            viewModel.start(it)
+        arguments?.getString("query")?.let {
+            query = it
+            val hashMap:HashMap<String,String> = HashMap<String,String>()
+            hashMap.put("query", it)
+            hashMap.put("page", "1")
+            viewModel.start(hashMap)
             onGetSourcesObserver()
         }
-        (activity as ToolbarTitleListener).onUpdateTitle(source_name, category_name, true)
     }
 
     private lateinit var adapter: NewsListAdapter
     fun setUpRecyclerView() = with(viewbinding) {
-        adapter = NewsListAdapter(this@NewsListPageFragment)
-        adapter.setCurrent_page(adapter.NEWSLIST_PAGE)
+        adapter = NewsListAdapter(this@SearchFragment)
+        adapter.setCurrent_page(adapter.SEARCH_PAGE)
+
         newslistRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         newslistRecyclerView.adapter = adapter
 
-        newslistSwipeContainer.setOnRefreshListener(this@NewsListPageFragment)
+        newslistSwipeContainer.setOnRefreshListener(this@SearchFragment)
     }
 
-    private val viewModel: NewsListViewModel by viewModels()
+    private val viewModel: SearchViewModel by viewModels()
     private fun onGetSourcesObserver() = with(viewbinding) {
-        viewModel.getHeadlines.observe(viewLifecycleOwner, Observer {
+        viewModel.getEverything.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
                     newslistSwipeContainer.isRefreshing = false
@@ -95,11 +90,20 @@ class NewsListPageFragment : BaseFragmentBinding<FragmentNewslistPageBinding>(),
     }
 
     override fun onRefresh() {
-        adapter.getItems().clear()
-        adapter.notifyDataSetChanged()
-        viewModel.start(source_id)
-        onGetSourcesObserver()
+        onReSearch(query)
     }
 
+    fun onReSearch(_query:String) {
+        query = _query
+        adapter.getItems().clear()
+        adapter.notifyDataSetChanged()
+
+        val hashMap:HashMap<String,String> = HashMap<String,String>()
+        hashMap.put("query", _query)
+        hashMap.put("page", "1")
+
+        viewModel.start(hashMap)
+        onGetSourcesObserver()
+    }
 
 }

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.haryop.mynewsportal.R
 import com.haryop.mynewsportal.databinding.FragmentSourcePageBinding
+import com.haryop.mynewsportal.ui.ToolbarTitleListener
 import com.haryop.mynewsportal.utils.Resource
 import com.haryop.synpulsefrontendchallenge.ui.companylist.SourceAdapter
 import com.haryop.synpulsefrontendchallenge.utils.BaseFragmentBinding
@@ -38,6 +39,7 @@ class SourcePageFragment : BaseFragmentBinding<FragmentSourcePageBinding>(),
             viewModel.start(it)
             onGetSourcesObserver()
         }
+        (activity as ToolbarTitleListener).onUpdateTitle("Select Source", category, false)
     }
 
     private lateinit var adapter: SourceAdapter

@@ -1,42 +1,32 @@
-package com.haryop.mynewsportal.ui
+package com.haryop.mynewsportal.ui.searchpage
 
-import android.content.Intent
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.children
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.haryop.mynewsportal.R
 import com.haryop.mynewsportal.databinding.ActivityMainBinding
-import com.haryop.mynewsportal.ui.searchpage.SearchActivity
 import com.haryop.synpulsefrontendchallenge.utils.BaseActivityBinding
 import com.haryop.synpulsefrontendchallenge.utils.comingSoon
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-interface ToolbarTitleListener {
-    fun onUpdateTitle(source_name: String, category_name: String, isMarquee: Boolean)
-}
 
 @AndroidEntryPoint
-class MainActivity : BaseActivityBinding<ActivityMainBinding>(), ToolbarTitleListener,
-    Toolbar.OnMenuItemClickListener {
+class SearchActivity : BaseActivityBinding<ActivityMainBinding>(), Toolbar.OnMenuItemClickListener {
 
     override val bindingInflater: (LayoutInflater) -> ActivityMainBinding
         get() = ActivityMainBinding::inflate
 
+    var query = ""
     override fun setupView(binding: ActivityMainBinding) {
+        query = intent.getStringExtra("query").toString()
         setUpFragments(binding.root)
     }
 
@@ -45,28 +35,21 @@ class MainActivity : BaseActivityBinding<ActivityMainBinding>(), ToolbarTitleLis
             supportFragmentManager.findFragmentById(R.id.nav_host_category_fragment) as NavHostFragment
         val navController: NavController = navHostFragment.navController
 
-        navController.setGraph(R.navigation.main_nav_graph)
+        navController.setGraph(R.navigation.search_nav_graph, bundleOf("query" to query))
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            blackscreen.visibility = View.GONE
-            mainToolbar.menu.findItem(R.id.action_search)?.collapseActionView()
-
-            if (destination.id == R.id.categoryPageFragment) {
-                mainToolbar.subtitle = ""
-                isLastFragment = true
-            } else {
-                isLastFragment = false
-            }
         }
 
         val appBarConfiguration: AppBarConfiguration = AppBarConfiguration(navController.graph)
         mainToolbar.setupWithNavController(navController, appBarConfiguration)
+
         mainToolbar.inflateMenu(R.menu.menu_main_activity)
-        mainToolbar.setOnMenuItemClickListener(this@MainActivity)
+        mainToolbar.setOnMenuItemClickListener(this@SearchActivity)
         mainToolbar.setNavigationOnClickListener {
             blackscreen.visibility = View.GONE
             mainToolbar.menu.findItem(R.id.action_search)?.collapseActionView()
             navController.popBackStack()
         }
+
         mainToolbar.menu.findItem(R.id.action_search)
             ?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
@@ -83,32 +66,6 @@ class MainActivity : BaseActivityBinding<ActivityMainBinding>(), ToolbarTitleLis
 
     }
 
-    override fun onUpdateTitle(source_name: String, category_name: String, isMarquee: Boolean) =
-        with(binding) {
-            mainToolbar.title = source_name
-            mainToolbar.subtitle = category_name
-
-            if (isMarquee) {
-                findViewById<Toolbar>(R.id.main_toolbar)?.let {
-                    setToolbarTextViewsMarquee(it)
-                }
-            }
-        }
-
-    fun setToolbarTextViewsMarquee(toolbar: Toolbar) {
-        for (child in toolbar.children) {
-            if (child is TextView) {
-                setMarquee(child)
-            }
-        }
-    }
-
-    fun setMarquee(textView: TextView) {
-        textView.ellipsize = TextUtils.TruncateAt.MARQUEE
-        textView.isSelected = true
-        textView.marqueeRepeatLimit = -1
-    }
-
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.getItemId()) {
             R.id.action_search -> {
@@ -117,7 +74,7 @@ class MainActivity : BaseActivityBinding<ActivityMainBinding>(), ToolbarTitleLis
                 searchView.setOnQueryTextListener(object :
                     SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
-                        openSearchPage("\n" + query)
+                        reSearchPage("\n" + query)
 
                         if (!searchView.isIconified()) {
                             searchView.setIconified(true);
@@ -136,36 +93,26 @@ class MainActivity : BaseActivityBinding<ActivityMainBinding>(), ToolbarTitleLis
         return false
     }
 
-    fun openSearchPage(query: String) {
-        var intent = Intent(this@MainActivity, SearchActivity::class.java)
-        intent.putExtra("query", query);
-        startActivity(intent)
+    fun reSearchPage(_query: String) = with(binding) {
+        query = _query
+        var searchFragment:SearchFragment = getForegroundFragment() as SearchFragment
+        searchFragment.onReSearch(_query)
     }
 
-    var isLastFragment: Boolean = false
-    private var doubleBackToExitPressedOnce = false
-    val activityScope = CoroutineScope(Dispatchers.Main)
+    fun getForegroundFragment(): Fragment? {
+        val navHostFragment: Fragment? =
+            supportFragmentManager.findFragmentById(R.id.nav_host_category_fragment)
+        return if (navHostFragment == null) null else navHostFragment.getChildFragmentManager()
+            .getFragments().get(0)
+    }
+
     override fun onBackPressed() {
         if (binding.blackscreen.visibility == View.VISIBLE) {
             binding.blackscreen.visibility = View.GONE
             binding.mainToolbar.menu.findItem(R.id.action_search)?.collapseActionView()
-        } else if (isLastFragment) {
-            if (doubleBackToExitPressedOnce) {
-                super.onBackPressed()
-                return
-            }
-
-            this.doubleBackToExitPressedOnce = true
-            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
-
-            activityScope.launch {
-                delay(2000)
-                doubleBackToExitPressedOnce = false
-            }
-        } else {
+        }else{
             super.onBackPressed()
         }
-
     }
 
 }

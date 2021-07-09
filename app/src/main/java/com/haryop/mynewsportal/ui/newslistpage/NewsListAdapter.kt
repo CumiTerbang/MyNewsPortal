@@ -20,7 +20,7 @@ class NewsListAdapter(private val listener: NewsListItemListener) :
 
     private val items = ArrayList<Any>()
 
-    fun getItems():ArrayList<Any>{
+    fun getItems(): ArrayList<Any> {
         return items
     }
 
@@ -30,11 +30,18 @@ class NewsListAdapter(private val listener: NewsListItemListener) :
         notifyDataSetChanged()
     }
 
+    val SEARCH_PAGE = 0
+    val NEWSLIST_PAGE = 1
+    private var current_page = 0
+    fun setCurrent_page(current_page:Int){
+        this.current_page = current_page
+    }
+
     val ITEM_TYPE_NEWS_ITEM_LAYOUT = 0
     val ITEM_TYPE_BOTTOMSPACE_LAYOUT = 1
     val ITEM_TYPE_NEWS_HEADLINE_LAYOUT = 2
     override fun getItemViewType(position: Int): Int {
-        if (position == 0 && items[position] is NewsListEntity) {
+        if (position == 0 && items[position] is NewsListEntity && current_page == NEWSLIST_PAGE) {
             return ITEM_TYPE_NEWS_HEADLINE_LAYOUT
         } else if (items[position] is NewsListEntity) {
             return ITEM_TYPE_NEWS_ITEM_LAYOUT

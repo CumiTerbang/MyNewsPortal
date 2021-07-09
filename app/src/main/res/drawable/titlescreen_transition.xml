@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transition xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ctgry_general"/>
+    <item android:drawable="@drawable/ctgry_sports"/>
+    <item android:drawable="@drawable/ctgry_technology"/>
+    <item android:drawable="@drawable/ctgry_science"/>
+    <item android:drawable="@drawable/ctgry_health"/>
+    <item android:drawable="@drawable/ctgry_entertainment"/>
+    <item android:drawable="@drawable/ctgry_business"/>
+</transition>
