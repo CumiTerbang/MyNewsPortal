@@ -22,14 +22,16 @@ class NewsDetailFragment : BaseFragmentBinding<FragmentNewsDetailBinding>() {
     lateinit var viewbinding: FragmentNewsDetailBinding
     lateinit var item: NewsListEntity
     override fun setupView(binding: FragmentNewsDetailBinding) {
-        viewbinding=binding
+        viewbinding = binding
         setUpContent()
     }
 
     fun setUpContent() = with(viewbinding) {
         arguments?.getSerializable("item")?.let {
             item = it as NewsListEntity
-            setUpWebview(item.description + "</br></br>" + item.content)
+            var desc = if(item.description.isNullOrEmpty()){""}else{item.description}
+            var content = if(item.content.isNullOrEmpty()){""}else{item.content}
+            setUpWebview(desc + "</br></br>" + content)
             title.text = item.title
             date.text = requireContext().setDate(item.publishedAt).toString()
 
@@ -45,7 +47,7 @@ class NewsDetailFragment : BaseFragmentBinding<FragmentNewsDetailBinding>() {
         }
     }
 
-    fun openChromeCustomTab(url: String){
+    fun openChromeCustomTab(url: String) {
         val defaultColors = CustomTabColorSchemeParams.Builder()
             .setToolbarColor(resources.getColor(R.color.peach))
             .build()

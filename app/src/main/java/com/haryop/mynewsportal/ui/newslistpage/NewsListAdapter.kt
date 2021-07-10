@@ -30,9 +30,9 @@ class NewsListAdapter(private val listener: NewsListItemListener) :
         notifyDataSetChanged()
     }
 
-    fun addItems(items: ArrayList<Any>) {
-        this.items.addAll(items)
-        notifyDataSetChanged()
+    fun addItems(_items: ArrayList<Any>) {
+        this.items.addAll(_items)
+        notifyItemRangeInserted(this.items.size-_items.size, this.items.size)
     }
 
     val SEARCH_PAGE = 0

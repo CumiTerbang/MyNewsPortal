@@ -1,15 +1,18 @@
 package com.haryop.mynewsportal.ui
 
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageView
 import com.haryop.mynewsportal.R
 import com.haryop.mynewsportal.databinding.ActivityTitleScreenBinding
 import com.haryop.synpulsefrontendchallenge.utils.BaseActivityBinding
+import com.haryop.synpulsefrontendchallenge.utils.BaseActivityFullWindowBinding
 import com.synnapps.carouselview.ImageClickListener
 import com.synnapps.carouselview.ImageListener
 
-class TitleScreenActivity : BaseActivityBinding<ActivityTitleScreenBinding>() {
+class TitleScreenActivity : BaseActivityFullWindowBinding<ActivityTitleScreenBinding>() {
 
     override val bindingInflater: (LayoutInflater) -> ActivityTitleScreenBinding
         get() = ActivityTitleScreenBinding::inflate

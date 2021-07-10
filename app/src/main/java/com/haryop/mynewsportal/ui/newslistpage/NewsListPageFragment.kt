@@ -16,7 +16,6 @@ import com.haryop.mynewsportal.ui.newsdetail.NewsDeatailActivity
 import com.haryop.mynewsportal.utils.Resource
 import com.haryop.synpulsefrontendchallenge.ui.companylist.NewsListAdapter
 import com.haryop.synpulsefrontendchallenge.utils.BaseFragmentBinding
-import com.haryop.synpulsefrontendchallenge.utils.comingSoon
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -66,27 +65,6 @@ class NewsListPageFragment : BaseFragmentBinding<FragmentNewslistPageBinding>(),
         newslistRecyclerView.adapter = adapter
 
         newslistSwipeContainer.setOnRefreshListener(this@NewsListPageFragment)
-
-        newslistRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) { //check for scroll down
-                    visibleItemCount = layManager.getChildCount();
-                    totalItemCount = layManager.getItemCount();
-                    pastVisiblesItems = layManager.findFirstVisibleItemPosition();
-
-                    if (loading) {
-                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                            loading = false;
-                            // Do pagination.. i.e. fetch new data
-                            page_param++
-                            comingSoon("\nDO NEXT PAGE")
-
-                            loading = true;
-                        }
-                    }
-                }
-            }
-        })
     }
 
     private val viewModel: NewsListViewModel by viewModels()
