@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg1"
+            android:gravity="fill"
+            android:src="@drawable/ctgry_general" />
+    </item>
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg2"
+            android:gravity="fill"
+            android:src="@drawable/ctgry_business" />
+    </item>
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg3"
+            android:gravity="fill"
+            android:src="@drawable/ctgry_entertainment" />
+    </item>
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg4"
+            android:gravity="fill"
+            android:src="@drawable/ctgry_health" />
+    </item>
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg5"
+            android:gravity="fill"
+            android:src="@drawable/ctgry_science" />
+    </item>
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg6"
+            android:gravity="fill"
+            android:src="@drawable/ctgry_technology" />
+    </item>
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg7"
+            android:gravity="fill"
+            android:src="@drawable/ctgry_sports" />
+    </item>
+
+</layer-list>
