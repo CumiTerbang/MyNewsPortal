@@ -7,6 +7,7 @@ import com.haryop.mynewsportal.R
 import com.haryop.mynewsportal.data.entities.NewsListEntity
 import com.haryop.mynewsportal.databinding.ItemNewsLayoutBinding
 import com.haryop.synpulsefrontendchallenge.utils.setDate
+import com.haryop.synpulsefrontendchallenge.utils.setImageGlide
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,10 +23,7 @@ class NewsItemViewHolder(
         date.text = itemView.context.setDate(item.publishedAt)
         itemView.setOnClickListener { listener.onClickedItem(item) }
 
-        Glide.with(itemBinding.root)
-            .load(item.urlToImage)
-            .placeholder(R.drawable.ic_launcher_foreground)
-            .into(itemImage)
+        itemView.context.setImageGlide(item.urlToImage, itemBinding.root, itemImage)
 
     }
 

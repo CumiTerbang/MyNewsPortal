@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
-import com.bumptech.glide.Glide
 import com.haryop.mynewsportal.R
 import com.haryop.mynewsportal.data.entities.NewsListEntity
 import com.haryop.mynewsportal.databinding.FragmentNewsDetailBinding
 import com.haryop.synpulsefrontendchallenge.utils.BaseFragmentBinding
 import com.haryop.synpulsefrontendchallenge.utils.setDate
+import com.haryop.synpulsefrontendchallenge.utils.setImageGlide
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,10 +35,7 @@ class NewsDetailFragment : BaseFragmentBinding<FragmentNewsDetailBinding>() {
             title.text = item.title
             date.text = requireContext().setDate(item.publishedAt).toString()
 
-            Glide.with(root)
-                .load(item.urlToImage)
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .into(image)
+            requireContext().setImageGlide(item.urlToImage, root, image)
 
             cont.setOnClickListener {
                 openChromeCustomTab(item.url)

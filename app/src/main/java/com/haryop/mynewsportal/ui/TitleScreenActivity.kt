@@ -90,12 +90,12 @@ class TitleScreenActivity : BaseActivityFullWindowBinding<ActivityTitleScreenBin
             override fun onPageSelected(position: Int) {
                 // skip fake page (first), go to last page
                 if (position === 0) {
-                    titleScreenCarouselView.setCurrentItem(category_images.size - 2)
+                    titleScreenCarouselView.setCurrentItem(category_images.size - 2, false)
                 }
 
                 // skip fake page (last), go to first page
                 if (position === category_images.size - 1) {
-                    titleScreenCarouselView.setCurrentItem(1) //notice how this jumps to position 1, and not position 0. Position 0 is the fake page!
+                    titleScreenCarouselView.setCurrentItem(1, false) //notice how this jumps to position 1, and not position 0. Position 0 is the fake page!
                 }
             }
 

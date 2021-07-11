@@ -6,6 +6,7 @@ import com.haryop.mynewsportal.R
 import com.haryop.mynewsportal.data.entities.NewsListEntity
 import com.haryop.mynewsportal.databinding.ItemNewsHeadlineLayoutBinding
 import com.haryop.synpulsefrontendchallenge.utils.setDate
+import com.haryop.synpulsefrontendchallenge.utils.setImageGlide
 import java.util.*
 
 class NewsHeadlineViewHolder(
@@ -19,10 +20,7 @@ class NewsHeadlineViewHolder(
         date.text = itemView.context.setDate(item.publishedAt)
         itemView.setOnClickListener { listener.onClickedItem(item) }
 
-        Glide.with(itemBinding.root)
-            .load(item.urlToImage)
-            .placeholder(R.drawable.ic_launcher_foreground)
-            .into(headlineImage)
+        itemView.context.setImageGlide(item.urlToImage, itemBinding.root, headlineImage)
 
     }
 

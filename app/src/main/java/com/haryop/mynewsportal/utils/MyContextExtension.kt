@@ -6,9 +6,11 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -67,4 +69,11 @@ fun Context.setDate(publishedAt: String): String {
     return date
 }
 
+fun Context.setImageGlide(imagUrl:String, view:View, imageViewTarget:ImageView){
+    com.bumptech.glide.Glide.with(view)
+        .load(imagUrl)
+        .placeholder(com.haryop.mynewsportal.R.mipmap.ic_launcher_round)
+        .into(imageViewTarget)
+
+}
 
