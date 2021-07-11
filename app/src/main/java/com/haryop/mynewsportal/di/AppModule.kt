@@ -46,14 +46,15 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideNewsApiOrgRemoteDataSource(alphaVantageService: NewsApiOrgServices) =
-        NewsApiOrgRemoteDataSource(alphaVantageService)
+    fun provideNewsApiOrgRemoteDataSource(newsApiOrgServices: NewsApiOrgServices) =
+        NewsApiOrgRemoteDataSource(newsApiOrgServices)
 
     @Singleton
     @Provides
     fun provideRepository(
-        remoteDataSource: NewsApiOrgRemoteDataSource
+        remoteDataSource: NewsApiOrgRemoteDataSource,
+        newsApiOrgServices: NewsApiOrgServices
     ) =
-        NewsApiOrgRepository(remoteDataSource)
+        NewsApiOrgRepository(remoteDataSource, newsApiOrgServices)
 
 }

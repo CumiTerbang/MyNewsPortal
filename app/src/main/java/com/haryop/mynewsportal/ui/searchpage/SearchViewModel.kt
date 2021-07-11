@@ -1,10 +1,11 @@
 package com.haryop.mynewsportal.ui.searchpage
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
 import com.haryop.mynewsportal.data.entities.NewsListEntities
+import com.haryop.mynewsportal.data.entities.NewsListEntity
 import com.haryop.mynewsportal.data.repository.NewsApiOrgRepository
 import com.haryop.mynewsportal.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,5 +27,11 @@ class SearchViewModel @Inject constructor(
     }
 
     val getEverything: LiveData<Resource<NewsListEntities>> = _getEverything
+
+    fun fetchEverythingLiveData(query:String): LiveData<PagingData<NewsListEntity>> {
+        return repository.letEverythingLiveData(query)
+            .map { it.map { it } }
+            .cachedIn(viewModelScope)
+    }
 
 }

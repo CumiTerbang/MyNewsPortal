@@ -1,12 +1,12 @@
 package com.haryop.mynewsportal
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 import androidx.viewbinding.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
 @HiltAndroidApp
-class MainApplication : Application() {
+class MainApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()

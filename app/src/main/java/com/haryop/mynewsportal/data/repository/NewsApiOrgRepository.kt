@@ -3,17 +3,25 @@ package com.haryop.mynewsportal.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.haryop.mynewsportal.data.entities.NewsListEntities
 import com.haryop.mynewsportal.data.entities.NewsListEntity
 import com.haryop.mynewsportal.data.entities.SourceEntities
 import com.haryop.mynewsportal.data.entities.SourceEntity
 import com.haryop.mynewsportal.data.remote.NewsApiOrgRemoteDataSource
+import com.haryop.mynewsportal.data.remote.NewsApiOrgServices
+import com.haryop.mynewsportal.data.remote.NewsListPagingSource
+import com.haryop.mynewsportal.utils.ConstantsObj
 import com.haryop.mynewsportal.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 class NewsApiOrgRepository @Inject constructor(
-    private val remoteDataSource: NewsApiOrgRemoteDataSource
+    private val remoteDataSource: NewsApiOrgRemoteDataSource,
+    private val newsApiOrgServices: NewsApiOrgServices
 ) {
 
     fun getSources(category: String) = performGetSourcesOperation(
@@ -96,5 +104,21 @@ class NewsApiOrgRepository @Inject constructor(
                 emit(Resource.error(responseStatus.message!!))
             }
         }
+
+    fun letEverythingLiveData(
+        query: String,
+        pagingConfig: PagingConfig = getDefaultPageConfig()
+    ): LiveData<PagingData<NewsListEntity>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = {
+                NewsListPagingSource(newsApiOrgServices, query)
+            }
+        ).liveData
+    }
+
+    fun getDefaultPageConfig(): PagingConfig {
+        return PagingConfig(pageSize = ConstantsObj.EVERYTHING_PAGE_SIZE, enablePlaceholders = true)
+    }
 
 }

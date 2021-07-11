@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -19,6 +20,7 @@ import com.haryop.mynewsportal.utils.Resource
 import com.haryop.synpulsefrontendchallenge.ui.companylist.NewsListAdapter
 import com.haryop.synpulsefrontendchallenge.utils.BaseFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.math.roundToInt
 
@@ -46,7 +48,7 @@ class SearchFragment : BaseFragmentBinding<FragmentNewslistPageBinding>(),
             hashMap.put("page", "1")
             viewModel.start(hashMap)
             Log.e("onGetSourcesObserver", "onGetSourcesObserver(1)")
-            onGetSourcesObserver(1)
+            onGetSourcesObserver(query)
         }
     }
 
@@ -69,76 +71,89 @@ class SearchFragment : BaseFragmentBinding<FragmentNewslistPageBinding>(),
 
         newslistSwipeContainer.setOnRefreshListener(this@SearchFragment)
 
-        scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-//                comingSoon("\nDO LOAD MORE" +
-//                        "\npage=${page}")
-
-                var page_toload = page + 1
-
-                Log.e("load more", "page: ${page}")
-                Log.e("load more", "page toload: ${page_toload}")
-                Log.e("load more", "total page: ${totalpage}")
-
-                if (page_toload <= totalpage) {
-                    getData(query, page_toload)
-                }
-
-            }
-        }
-
-        newslistRecyclerView.addOnScrollListener(scrollListener)
+//        scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
+//            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+//                // Triggered only when new data needs to be appended to the list
+//                // Add whatever code is needed to append new items to the bottom of the list
+////                comingSoon("\nDO LOAD MORE" +
+////                        "\npage=${page}")
+//
+//                var page_toload = page + 1
+//
+//                Log.e("load more", "page: ${page}")
+//                Log.e("load more", "page toload: ${page_toload}")
+//                Log.e("load more", "total page: ${totalpage}")
+//
+//                if (page_toload <= totalpage) {
+//                    getData(query, page_toload)
+//                }
+//
+//            }
+//        }
+//
+//        newslistRecyclerView.addOnScrollListener(scrollListener)
 
     }
 
     private val viewModel: SearchViewModel by viewModels()
     private var items = ArrayList<Any>()
-    private fun onGetSourcesObserver(_page: Int) = with(viewbinding) {
-        viewModel.getEverything.observe(viewLifecycleOwner, Observer {
-            when (it.status) {
-                Resource.Status.SUCCESS -> {
-                    Log.e("count article", "status: ${Resource.Status.SUCCESS}")
-                    newslistSwipeContainer.isRefreshing = false
-                    if (it.data != null) {
-                        total_articles = it.data.totalResults
-                        totalpage = (total_articles / ConstantsObj.EVERYTHING_PAGE_SIZE).toFloat()
-                            .roundToInt()
-                        if (!it.data.articles.isNullOrEmpty()) {
-                            var oldcount = items.size
-                            items.addAll(ArrayList(it.data.articles))
-                            if (_page == totalpage) {
-                                items.add(adapter.BOTTOMSPACE_LAYOUT)
-                            }
-                            Log.e("count article", "page: ${_page}")
-                            Log.e("count article", "total page: ${totalpage}")
-                            Log.e("count article", "oldcount: ${oldcount}")
-                            Log.e("count article", "currentsize: ${items.size}")
-                            if (_page == 1) {
-                                adapter.setItems(items)
-                            } else {
-                                adapter.addItems(ArrayList(it.data.articles))
-                            }
-                            Log.e("count article", "adapter count: ${adapter.itemCount}")
-                        } else {
-                            Timber.e("getSearchEndpoint.observe: SUCCESS tapi null")
-                            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-                Resource.Status.ERROR -> {
-                    newslistSwipeContainer.isRefreshing = false
-                    Timber.e("getSearchEndpoint.observe: error")
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
-                }
-                Resource.Status.LOADING -> {
-                    Timber.e("getSearchEndpoint.observe: LOADING")
-                    newslistSwipeContainer.isRefreshing = true
-                }
+
+    private fun onGetSourcesObserver(query:String)=with(viewbinding){
+        viewModel.fetchEverythingLiveData(query).observe(viewLifecycleOwner, Observer{
+
+            Log.e("search fragment", it.toString())
+            lifecycleScope.launch {
+                newslistSwipeContainer.isRefreshing = false
+                adapter.submitData(it)
             }
+
         })
     }
+
+//    private fun onGetSourcesObserver(_page: Int) = with(viewbinding) {
+//        viewModel.getEverything.observe(viewLifecycleOwner, Observer {
+//            when (it.status) {
+//                Resource.Status.SUCCESS -> {
+//                    Log.e("count article", "status: ${Resource.Status.SUCCESS}")
+//                    newslistSwipeContainer.isRefreshing = false
+//                    if (it.data != null) {
+//                        total_articles = it.data.totalResults
+//                        totalpage = (total_articles / ConstantsObj.EVERYTHING_PAGE_SIZE).toFloat()
+//                            .roundToInt()
+//                        if (!it.data.articles.isNullOrEmpty()) {
+//                            var oldcount = items.size
+//                            items.addAll(ArrayList(it.data.articles))
+//                            if (_page == totalpage) {
+//                                items.add(adapter.BOTTOMSPACE_LAYOUT)
+//                            }
+//                            Log.e("count article", "page: ${_page}")
+//                            Log.e("count article", "total page: ${totalpage}")
+//                            Log.e("count article", "oldcount: ${oldcount}")
+//                            Log.e("count article", "currentsize: ${items.size}")
+//                            if (_page == 1) {
+//                                adapter.setItems(items)
+//                            } else {
+//                                adapter.addItems(ArrayList(it.data.articles))
+//                            }
+//                            Log.e("count article", "adapter count: ${adapter.itemCount}")
+//                        } else {
+//                            Timber.e("getSearchEndpoint.observe: SUCCESS tapi null")
+//                            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//                }
+//                Resource.Status.ERROR -> {
+//                    newslistSwipeContainer.isRefreshing = false
+//                    Timber.e("getSearchEndpoint.observe: error")
+//                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+//                }
+//                Resource.Status.LOADING -> {
+//                    Timber.e("getSearchEndpoint.observe: LOADING")
+//                    newslistSwipeContainer.isRefreshing = true
+//                }
+//            }
+//        })
+//    }
 
     override fun onClickedItem(item: NewsListEntity) {
         var intent = Intent(activity, NewsDeatailActivity::class.java)
@@ -172,7 +187,7 @@ class SearchFragment : BaseFragmentBinding<FragmentNewslistPageBinding>(),
         Log.e("onGetSourcesObserver", "onGetSourcesObserver(${_page})")
         requireActivity().viewModelStore.clear()
         viewModel.start(hashMap)
-        onGetSourcesObserver(_page)
+        onGetSourcesObserver(_query)
     }
 
 }

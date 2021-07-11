@@ -69,9 +69,9 @@ fun Context.setDate(publishedAt: String): String {
     return date
 }
 
-fun Context.setImageGlide(imagUrl:String, view:View, imageViewTarget:ImageView){
+fun Context.setImageGlide(imgUrl:String?, view:View, imageViewTarget:ImageView){
     com.bumptech.glide.Glide.with(view)
-        .load(imagUrl)
+        .load(imgUrl?:"")
         .placeholder(com.haryop.mynewsportal.R.mipmap.ic_launcher_round)
         .into(imageViewTarget)
 

@@ -21,4 +21,10 @@ interface NewsApiOrgServices {
         @Query("page") page: String?
     ): Response<NewsListEntities>
 
+    @GET("everything?pageSize=" + ConstantsObj.EVERYTHING_PAGE_SIZE + "&" + ConstantsObj.NEWSAPIORG_BASEPARAM)
+    suspend fun getPagingEverything(
+        @Query("q") query: String?,
+        @Query("page") page: String?
+    ): NewsListEntities
+
 }
